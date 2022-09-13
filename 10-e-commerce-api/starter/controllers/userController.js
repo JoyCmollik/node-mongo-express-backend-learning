@@ -41,6 +41,32 @@ const updateUser = async (req, res) => {
 	res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
+const makeAdmin = async (req, res) => {
+	const { userId } = req.user;
+	const { email } = req.body;
+	
+	const admin = await User.find({ _id: userId });
+
+	if(!admin) {
+		throw new CustomError.UnauthorizedError('Not authorized');
+	}
+
+	const user = await User.find({ email });
+
+	if (!user) {
+		throw new CustomError.UnauthorizedError('');
+	}
+
+	const newAdmin = {...user, role: 'admin'};
+
+	const returnedUser = await User.findOneAndUpdate({_id: newAdmin._id}, newAdmin, {
+		new: true,
+		runValidators: true
+	});
+
+	res.status(StatusCodes.OK).json({ user: returnedUser });
+}
+
 const updateUserPassword = async (req, res) => {
 	const { oldPassword, newPassword } = req.body;
 
