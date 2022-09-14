@@ -92,6 +92,7 @@ module.exports = {
 	getAllUsers,
 	getSingleUser,
 	showCurrentUser,
+	makeAdmin,
 	updateUser,
 	updateUserPassword,
 };

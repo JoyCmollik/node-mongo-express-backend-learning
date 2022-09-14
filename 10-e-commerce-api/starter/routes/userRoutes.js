@@ -5,6 +5,7 @@ const {
 	getAllUsers,
 	getSingleUser,
 	showCurrentUser,
+	makeAdmin,
 	updateUser,
 	updateUserPassword,
 } = require('../controllers/userController');
@@ -17,6 +18,7 @@ router.route('/updateUser').post(authenticateUser, updateUser);
 
 router.route('/updateUserPassword').patch(authenticateUser, updateUserPassword);
 
+router.route('/makeAdmin').get(authorizePermissions('admin'), makeAdmin);
 
 router.route('/:id').get(getSingleUser); // always keep the params route at the end
 
