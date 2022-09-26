@@ -23,7 +23,7 @@ const ProductSchema = new mongoose.Schema(
 		},
 		image: {
 			type: String,
-			default: '/uploads/example.jpeg',
+			default: '/uploads/example.jpg',
 		},
 		category: {
 			type: String,
@@ -40,6 +40,7 @@ const ProductSchema = new mongoose.Schema(
 		},
 		colors: {
 			type: [String],
+			default: ['#222'],
             required: true
 		},
 		featured: {

@@ -45,26 +45,28 @@ const makeAdmin = async (req, res) => {
 	const { userId } = req.user;
 	const { email } = req.body;
 	
-	const admin = await User.find({ _id: userId });
+	const admin = await User.findOne({ _id: userId });
 
 	if(!admin) {
 		throw new CustomError.UnauthorizedError('Not authorized');
 	}
 
-	const user = await User.find({ email });
+	const user = await User.findOne({ email });
 
 	if (!user) {
-		throw new CustomError.UnauthorizedError('');
+		throw new CustomError.BadRequestError(`No user with this email ${email}`);
 	}
 
-	const newAdmin = {...user, role: 'admin'};
+	await User.findOneAndUpdate(
+		{ _id: user._id },
+		{ role: 'admin' },
+		{
+			new: true,
+			runValidators: true,
+		}
+	);
 
-	const returnedUser = await User.findOneAndUpdate({_id: newAdmin._id}, newAdmin, {
-		new: true,
-		runValidators: true
-	});
-
-	res.status(StatusCodes.OK).json({ user: returnedUser });
+	res.status(StatusCodes.OK).json({ msg: 'Successfully updated role admin' });
 }
 
 const updateUserPassword = async (req, res) => {
