@@ -68,7 +68,27 @@ const ProductSchema = new mongoose.Schema(
 			required: true,
 		},
 	},
-	{ timestamps: true }
+	{ timestamps: true, toJSON: { virtuals : true}, toObject: { virtuals : true} }
 );
+
+// this is a virtual method, being used for getting all the reviews associated with one specified product
+ProductSchema.virtual('reviews', {
+	ref: 'Review',
+	localField: '_id',
+	foreignField: 'product',
+	justOne: false,
+	match: { rating: 5 }
+})
+
+/* 
+#problem - while removing any product, should also delete associated reviews
+#solution - can use remove hook here and access model Review to delete them
+*/
+ProductSchema.pre('remove', async function(next){
+	await this.model('Review').deleteMany({ product: this._id });
+
+	// next();
+})
+
 
 module.exports = mongoose.model('Product', ProductSchema);
