@@ -23,6 +23,8 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please provide password'],
     minlength: 6,
   },
+  passwordToken: String,
+  passwordTokenExpirationDate: Date,
   role: {
     type: String,
     enum: ['admin', 'user'],
