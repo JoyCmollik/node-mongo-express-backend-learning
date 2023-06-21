@@ -1,4 +1,4 @@
-# Node and Express Learning Materials
+# Node and Express Learning
 
 #### Contents
 
